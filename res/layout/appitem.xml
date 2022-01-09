@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/appitem_root"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/appitem_main"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:gravity="center_vertical"
+        android:paddingLeft="3dp">
+
+        <RelativeLayout
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp">
+
+            <ImageView
+                android:id="@+id/appitem_appicon"
+                android:layout_width="38dp"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_height="38dp"
+                android:background="@drawable/ic_adjust_black_24dp"/>
+
+            <ImageView
+                android:layout_width="8dp"
+                android:layout_height="8dp"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/outgoing"
+                android:id="@+id/appitem_launchableic"
+                android:visibility="gone"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="app name"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:id="@+id/appitem_appname"
+                android:layout_marginRight="76dp"
+                android:ellipsize="end"
+                android:textColor="#000000"
+                android:singleLine="true"
+                android:layout_marginTop="8dp"
+                android:minLines="1"/>
+
+            <Switch
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:id="@+id/appitem_switch"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/appitem_more_root"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:background="#CAD8E2"
+        android:padding="5dp"
+        android:tag="gone"
+        android:minHeight="1dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/appitem_more_name"
+            android:layout_marginBottom="5dp"
+            android:textColor="#000000"
+            android:textSize="28px"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:id="@+id/appitem_more_pkgname"
+            android:layout_marginBottom="5dp"
+            android:textColor="#000000"
+            android:textSize="28px"/>
+
+        <TextView
+            android:text=" "
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:id="@+id/appitem_more_version"
+            android:textColor="#000000"
+            android:textSize="28px"/>
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

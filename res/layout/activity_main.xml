@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:gravity="center"
+            android:background="@color/primary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WireGuard"
+                android:layout_weight="1.0"
+                android:textSize="20sp"
+                android:layout_marginLeft="5dp"
+                android:textColor="@color/text"/>
+
+            <Switch
+                android:id="@+id/main_toggle"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_marginRight="20dp"
+                
+                android:background="#202020"/>
+
+            <LinearLayout
+                android:onClick="showSearchPanel"
+                android:orientation="vertical"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_marginRight="20dp">
+
+                <ImageView
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/ic_search_white_24dp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:onClick="openSettings"
+                android:id="@+id/activity_mainLinearLayoutbtn_settings_open"
+                android:orientation="vertical"
+                android:layout_width="40dp"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <ImageView
+                    android:clickable="false"
+                    android:layout_width="22dp"
+                    android:layout_height="22dp"
+                    android:background="@drawable/ic_settings_white_24dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+        
+        <!--app type tab panel
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="#3C3C3C">
+            
+        </LinearLayout>-->
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/applist"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:id="@+id/spinner"
+        android:indeterminate="true"
+        android:visibility="visible"/>
+    
+    <!-- sreach panel -->
+    <LinearLayout
+        android:id="@+id/activity_main_searchpanel"
+        android:background="#ffffff"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="10dp"
+        android:visibility="gone">
+
+        <EditText
+            android:id="@+id/activity_main_searchinput"
+            android:layout_width="match_parent"
+            android:ems="10"
+            android:layout_height="50dp"
+            android:background="#00000000"
+            android:hint="search app or package name"/>
+
+        <View
+            android:background="#DCDCDC"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
+        <ListView
+            android:id="@+id/activity_main_searchlist"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
