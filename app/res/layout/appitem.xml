@@ -4,7 +4,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#000000">
 
     <LinearLayout
         android:id="@+id/appitem_main"
@@ -21,18 +22,25 @@
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp">
 
-            <ImageView
-                android:id="@+id/appitem_appicon"
+            <LinearLayout
                 android:layout_width="38dp"
-                style="?android:attr/buttonBarButtonStyle"
                 android:layout_height="38dp"
-                android:background="@drawable/ic_adjust_black_24dp"/>
+                android:orientation="vertical"
+                android:gravity="center">
+                
+                <ImageView
+                    android:id="@+id/appitem_appicon"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/ic_app_dummy"/>
+                
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="8dp"
                 android:layout_height="8dp"
                 android:layout_alignParentRight="true"
-                android:background="@drawable/outgoing"
+                android:background="@drawable/outgoing_w"
                 android:id="@+id/appitem_launchableic"
                 android:visibility="gone"/>
 
@@ -50,7 +58,7 @@
                 android:id="@+id/appitem_appname"
                 android:layout_marginRight="76dp"
                 android:ellipsize="end"
-                android:textColor="#000000"
+                android:textColor="#ffffff"
                 android:singleLine="true"
                 android:layout_marginTop="8dp"
                 android:minLines="1"/>
@@ -73,7 +81,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone"
-        android:background="#CAD8E2"
+        android:background="#50CAD8E2"
         android:padding="5dp"
         android:tag="gone"
         android:minHeight="1dp">
@@ -84,8 +92,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/appitem_more_name"
             android:layout_marginBottom="5dp"
-            android:textColor="#000000"
-            android:textSize="28px"/>
+            android:textColor="#ffffff"
+            android:textSize="14sp"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -93,8 +101,8 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:id="@+id/appitem_more_pkgname"
             android:layout_marginBottom="5dp"
-            android:textColor="#000000"
-            android:textSize="28px"/>
+            android:textColor="#ffffff"
+            android:textSize="14sp"/>
 
         <TextView
             android:text=" "
@@ -102,8 +110,15 @@
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:id="@+id/appitem_more_version"
-            android:textColor="#000000"
-            android:textSize="28px"/>
+            android:textColor="#ffffff"
+            android:textSize="12sp"/>
+        
+        <Button
+            android:id="@+id/appitem_btn_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="app info"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

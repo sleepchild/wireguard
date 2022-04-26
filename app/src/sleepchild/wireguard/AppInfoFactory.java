@@ -7,7 +7,12 @@ import android.graphics.drawable.*;
 
 public class AppInfoFactory
 {
+    
     AppInfoFactory(){}
+    
+    public void queue(Runnable task){
+        
+    }
     
     public static List<AppInfo> getAllApps(Context ctx){
         //
@@ -26,6 +31,7 @@ public class AppInfoFactory
             info.system = ((pi.applicationInfo.flags & ApplicationInfo.FLAG_SYSTEM) != 0);
             //info.icon = pi.applicationInfo.loadIcon(pm);
             info.allowed = util.isAllowed(info.packageName);
+            
             info.launchIntent = pm.getLaunchIntentForPackage(pi.packageName);
             alist.add(info);
         }

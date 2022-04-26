@@ -56,6 +56,7 @@ public class IPv4
         if(protocol==PROTOCOL_TCP){
             this.tcp = new TCP(buffer, this.sourceAddress, this.destinationAddress);
         }else if(protocol==PROTOCOL_UDP){
+            LogTool.get().f("ipv4.java","isudp");
             this.udp = new UDP(buffer);
             // no support for now;
             // throw new IOExecption("UDP currently not supported");
@@ -129,17 +130,36 @@ public class IPv4
         return tcp;
     }
     
-    
     public int getUid4() {
         String addr = "";
         byte[] b = this.sourceAddress.getAddress();
         for (int i = b.length - 1; i >= 0; i--)
             addr += String.format("%02X", b[i]);
-        addr += ":" + String.format("%04X", this.tcp.sourcePort);
+        int prt = -1;
+        if(tcp!=null){
+            prt = tcp.getSourcePort();
+        }else{
+            if(udp!=null){
+                prt = udp.sorcePort;
+            }
+        }
+        addr += ":" + String.format("%04X", prt);// this.tcp.sourcePort);
 
         int uid = scanUid("0000000000000000FFFF0000" + addr, "/proc/net/tcp6");
-        if (uid < 0)
-            uid = scanUid(addr, "/proc/net/tcp");
+        if (uid < 0){
+            if(tcp!=null){
+                uid = scanUid(addr, "/proc/net/tcp");
+            }else if(udp!=null){
+                uid = scanUid(addr, "/proc/net/udp");
+            }else{
+                uid = scanUid(addr, "/proc/net/tcp");
+            }
+        }
+        String d = "";
+        d+= "\naddr: "+addr;
+        d+= "\nuid: "+uid;
+        
+        LogTool.d("IPV4.java", d);
         return uid;
     }
 

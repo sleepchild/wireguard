@@ -7,26 +7,23 @@ import android.content.*;
 
 public class AppInfo implements Comparable<AppInfo>
 {
-    ApplicationInfo rootinfo;
-    String name="";
-    String packageName="";
-    String version="";
-    boolean system=false;
-    boolean hasInternet=false;
-    boolean allowed=false;//
-    Drawable icon=null;
-    boolean ismorevisible=false;
-    Intent launchIntent=null;
+    public ApplicationInfo rootinfo;
+    public String name="";
+    public String packageName="";
+    public String version="";
+    public boolean system=false;
+    public boolean hasInternet=false;
+    public boolean allowed=false;//
+    public boolean ismorevisible=false;
+    public Intent launchIntent=null;
     
-    
-    AppInfo(){
+    public AppInfo(){
         //
-    }
+    } 
     
     @Override
     public int compareTo(AppInfo other)
     {
-        // TODO: Implement this method
         return name.toLowerCase().compareTo(other.name.toLowerCase());
     }
     

@@ -24,6 +24,8 @@ public class MainActivity extends Activity {
     ProgressBar spinner;
     Context ctx;
     
+    App app;
+    
     boolean enabled;
     int VPN_SERVICE_REQUEST = 566;
     
@@ -42,7 +44,7 @@ public class MainActivity extends Activity {
     }
     
     private void init(){
-        
+        app = new App(this);
         imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
         
         searchPanel = new SearchPanel(this);
@@ -67,7 +69,7 @@ public class MainActivity extends Activity {
         spinner=(ProgressBar)findViewById(R.id.spinner);
         //
         list5=(ListView)findViewById(R.id.applist);
-        alAdapter=new AppListAdapter(ctx);
+        alAdapter=new AppListAdapter(ctx, app);
         list5.setAdapter(alAdapter);
         //
         updateAppList();

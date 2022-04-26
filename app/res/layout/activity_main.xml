@@ -2,7 +2,8 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@color/primary">
 
     <LinearLayout
         android:orientation="vertical"
@@ -30,7 +31,6 @@
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:layout_marginRight="20dp"
-                
                 android:background="#202020"/>
 
             <LinearLayout
@@ -44,7 +44,7 @@
                 <ImageView
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:background="@drawable/ic_search_white_24dp"/>
+                    android:background="@drawable/ic_search"/>
 
             </LinearLayout>
 
@@ -66,14 +66,11 @@
 
         </LinearLayout>
         
-        <!--app type tab panel
         <LinearLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="#3C3C3C">
-            
-        </LinearLayout>-->
+            android:layout_height="1dp"
+            android:background="#ffff"/>
 
         <LinearLayout
             android:orientation="vertical"
@@ -100,7 +97,7 @@
     <!-- sreach panel -->
     <LinearLayout
         android:id="@+id/activity_main_searchpanel"
-        android:background="#ffffff"
+        android:background="#000000"
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -113,10 +110,12 @@
             android:ems="10"
             android:layout_height="50dp"
             android:background="#00000000"
+            android:textColor="#ffffff"
+            android:textColorHint="#E0E0E0"
             android:hint="search app or package name"/>
 
         <View
-            android:background="#DCDCDC"
+            android:background="#ffffff"
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 

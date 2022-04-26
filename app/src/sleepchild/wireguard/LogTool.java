@@ -10,6 +10,8 @@ public class LogTool
         //
     }
     
+    public static String dirp = "/sdcard/.sleepchild/wg/";
+    
     public static LogTool get(){
         LogTool instance = deftInstance;
         if(instance==null){
@@ -29,14 +31,19 @@ public class LogTool
         filestr += tag +":\n  "+ msg + "\n";
     }
     
+    public static void d(String tag, String msg){
+        get().f(tag, msg);
+    }
+    
     public void push(){
         if(filestr.isEmpty()){
             return;
         }
+        new File(dirp).mkdirs();
         try
         {
             long stamp = new Date().getTime();
-            FileOutputStream fout = new FileOutputStream("/sdcard/.sleepchild/wire_"+stamp+".txt");
+            FileOutputStream fout = new FileOutputStream(dirp+"wire_"+stamp+".txt");
             fout.write(filestr.getBytes());
             fout.flush();
             fout.close();

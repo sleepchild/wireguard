@@ -4,6 +4,7 @@ import android.view.*;
 import android.content.*;
 import java.util.*;
 import android.graphics.*;
+import android.graphics.drawable.*;
 
 public class AppListAdapter extends BaseAdapter
 {
@@ -12,9 +13,11 @@ public class AppListAdapter extends BaseAdapter
     List<AppInfo> appList=new ArrayList<>();
     SPrefs prefs;
     Utils util;
+    App app;
     
-    AppListAdapter(Context ctx){
+    public AppListAdapter(Context ctx, App ai){
         this.ctx=ctx;
+        this.app= ai;
         inflator=LayoutInflater.from(ctx);
         prefs=new SPrefs(ctx);
         util = new Utils(ctx);
@@ -74,11 +77,20 @@ public class AppListAdapter extends BaseAdapter
             name.setTextColor(Color.parseColor("#aa0009"));
         }
        
-        if(info.icon==null){
-           //info.icon= AppInfoFactory.getIcon(ctx,info.rootinfo);
-        }
-        ImageView ic = (ImageView) view.findViewById(R.id.appitem_appicon);
+        final ImageView ic = (ImageView) view.findViewById(R.id.appitem_appicon);
         //ic.setBackgroundDrawable(info.icon);
+        app.queueTask(new Runnable(){
+            public void run(){
+                final Drawable d = AppInfoFactory.getIcon(ctx,info.rootinfo);
+                if(d!=null){
+                    app.runInMainThread(new Runnable(){
+                        public void run(){
+                            ic.setBackgroundDrawable(d);
+                        }
+                    });
+                }
+            }
+        });
         
         Switch itemswitch = (Switch) view.findViewById(R.id.appitem_switch);
         itemswitch.setChecked(info.allowed);
@@ -106,7 +118,7 @@ public class AppListAdapter extends BaseAdapter
         }
         
         TextView tvappname = (TextView)view.findViewById(R.id.appitem_more_name);
-        tvappname.setText(info.name);
+        tvappname.setText(info.name+" [["+info.rootinfo.uid+"]]");
         TextView tvpkgname = (TextView)view.findViewById(R.id.appitem_more_pkgname);
         tvpkgname.setText(info.packageName);
         TextView tvVersion = (TextView)view.findViewById(R.id.appitem_more_version);

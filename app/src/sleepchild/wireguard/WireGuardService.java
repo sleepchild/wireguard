@@ -33,6 +33,8 @@ public class WireGuardService extends VpnService
     ParcelFileDescriptor vpn = null;
     Context ctx_;
     Handler handle;
+    
+    Debuging debuging;
 
     public static void start(Context ctx){
         Intent ssi = new Intent(ctx, WireGuardService.class);
@@ -59,6 +61,7 @@ public class WireGuardService extends VpnService
         ctx_ = WireGuardService.this;
         prefs = new SPrefs(ctx_);
         handle = new Handler();
+        debuging = new Debuging(this);
     }
     
     @Override
@@ -80,7 +83,7 @@ public class WireGuardService extends VpnService
                                     showNotif();
                                 }
                                 prefs.setWGEnabled(true);//
-                                //startDebug(vpn);
+                                startDebug(vpn);
                             }
                             break;
                         case CMD_RELOAD:
@@ -124,7 +127,9 @@ public class WireGuardService extends VpnService
         //builder.addRoute("0:0:0:0:0:0:0:0", 0);
         //*/
         //*
-        LogTool.get().f(TAG, "preparing application list");
+        
+        //*
+        LogTool.get().f(TAG, "preparing allowed applications list");
         
         for(AppInfo info : AppInfoFactory.getAllApps(ctx_)){
             if(info.allowed){
@@ -138,6 +143,7 @@ public class WireGuardService extends VpnService
             }
             
         }
+        //*/
         
         //*/
         
@@ -145,7 +151,7 @@ public class WireGuardService extends VpnService
         //*/
         //*
         if(debug){
-            //builder.setBlocking(true);
+           // builder.setBlocking(true);
         }
         //*/
         //builder.setBlocking(debug);
@@ -176,70 +182,27 @@ public class WireGuardService extends VpnService
         if(pfd==null){
             return;
         }
+        debuging.start(pfd);
         debugThread = new Thread(new Runnable(){
             @Override
             public void run(){
                 try {
-                    FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
-                    FileOutputStream out = new FileOutputStream(pfd.getFileDescriptor());
-
-                    //DatagramChannel tunnel = DatagramChannel.open();
-                    
-                    //tunnel.connect("",88);
-                    
-                  //  protect(tunnel.socket());
+                    //FileInputStream in = new FileInputStream(pfd.getFileDescriptor());
+                    //FileOutputStream out = new FileOutputStream(pfd.getFileDescriptor());
                     
                     ByteBuffer buffer = ByteBuffer.allocate(32767);
                     buffer.order(ByteOrder.BIG_ENDIAN);
 
-                    LogTool.get().f(TAG, "Start receiving");
+                    LogTool.get().f(TAG, "Start debugging");
                     while (!Thread.currentThread().isInterrupted() &&
                            pfd.getFileDescriptor() != null &&
-                           pfd.getFileDescriptor().valid())
-                        try {
-                            buffer.clear();
-                            int length = in.read(buffer.array());
-                            if (length > 0) {
-                                buffer.limit(length);
-                                
-                                debugPacket(buffer);
-                                
-                                Thread.sleep(100);
-                                
-                                
-                                /*
-                                Packet pkt = new Packet(buffer);
-
-                                if (pkt.IPv4.protocol == Packet.IPv4Header.TCP && pkt.TCP.SYN) {
-                                    int uid = pkt.getUid4();
-                                    if (uid < 0)
-                                        LogTool.get().f(TAG, "uid not found");
-
-                                    String[] pkg = getPackageManager().getPackagesForUid(uid);
-                                    if (pkg == null)
-                                        pkg = new String[]{uid == 0 ? "root" : "unknown"};
-
-                                    LogTool.get().f(TAG, "Connect " + pkt.IPv4.destinationAddress + ":" + pkt.TCP.destinationPort + " uid=" + uid + " pkg=" + pkg[0]);
-
-                                    // Send RST
-                                    pkt.swapAddresses();
-                                    pkt.TCP.clearFlags();
-                                    pkt.TCP.RST = true;
-                                    long ack = pkt.TCP.acknowledgementNumber;
-                                    pkt.TCP.acknowledgementNumber = (pkt.TCP.sequenceNumber + 1) & 0xFFFFFFFFL;
-                                    pkt.TCP.sequenceNumber = (ack + 1) & 0xFFFFFFFFL;
-                                    pkt.send(out);
-                                }
-                                
-                                //*/
-                            }
-                        } catch (Throwable ex) {
-                            LogTool.get().f(TAG, ex.toString());
-                        }
-                        in.close();
-                        out.close();
+                           pfd.getFileDescriptor().valid()){
+                             debuging.loop();
+                             Thread.sleep(1000);
+                           }
                         pfd.close();
-                    LogTool.get().f(TAG, "End receiving");
+                    LogTool.get().f(TAG, "End debugging");
+                    LogTool.get().push();
                 } catch (Throwable ex) {
                     LogTool.get().f(TAG, ex.toString() + "\n" + android.util.Log.getStackTraceString(ex));
                 }
@@ -252,110 +215,18 @@ public class WireGuardService extends VpnService
     public void stopDebug(){
         if(debugThread!=null){
             debugThread.interrupt();
+            debuging.stop();
         }
         debugThread=null;
     }
     
-    private void debugPacket(ByteBuffer buffer)
-    {
-        byte[] v6Buffer = buffer.array();
-        /*
-        buffer.clear();
-        for( byte b : v6Buffer){
-            buffer.put(b);
-        }
-        //*/
-        
-        IPv4 pkt;
-        String stats = "";
-        boolean p = false;
-        try
-        {
-            pkt = new IPv4(buffer);
-           
-            stats = "receive packet:: ";
-            
-            stats += "  version=" + pkt.getVersion();
-            stats += "  Source addr= "
-               + pkt.getSourceAddr().getHostAddress() 
-               + ":"+ pkt.getTCP().getSourcePort();
-               
-            stats +="  Dest addr= "
-                +pkt.getDestAddr().getHostAddress()
-                +":"+ pkt.getTCP().getDestPort();
-            
-            int uid = pkt.getUid4();
-            stats += "  uid=" + uid;
-            
-            String[] pkg = getPackageManager().getPackagesForUid(uid);
-            if (pkg == null)
-                pkg = new String[]{uid == 0 ? "root" : "unknown"};
-                
-            stats += "  pkg=" + pkg[0];
-            p=true;
-            //int tcp = packet.protocol;
-        }
-        catch (IPv4.NotVersion4Exception e){
-            debugV6(ByteBuffer.wrap(v6Buffer));
-        }catch(IOException ioe){
-            LogTool.get().f(TAG, ioe.getMessage());
-        }
-        
-        if(p){
-            LogTool.get().f(TAG, stats);
-        }
-    }
     
-    void debugV6(ByteBuffer buffer){
-        String stats="";
-        boolean p = false;
-        try
-        {
-            IPv6 pkt6 = new IPv6(buffer);
-            
-            TCP tcp6=null;
-            if(pkt6.getProtocol() == IPv6.PROTOCOL_TCP){
-                tcp6 = pkt6.getTCP();
-            }
-            
-            stats += "recieve packet.. "
-              + "  protocol="+pkt6.getProtocol()
-            
-            + "  source address="
-                + pkt6.getSourceAddress().getHostAddress();
-            if(tcp6!=null){
-                //tats += " src_port="+tcp6.getSourcePort();
-            }
-            
-            stats += "  dest address="
-                + pkt6.getDestAddress().getHostAddress();
-            if(tcp6!=null){
-                //stats += " dest_port="+tcp6.getDestPort();
-            }
-            
-            
-            stats += "  uuid=";
-            
-            stats += "  pkg=";
-            
-            
-            p = true;
-            
-        }
-        catch (IPv6.NotVersion6Exception e){
-            LogTool.get().f(TAG, e.getMessage());
-        }catch(UnknownHostException uhe){
-            LogTool.get().f(TAG, uhe.getMessage());
-        }
-        
-        if(p == true){
-            LogTool.get().f(TAG, stats);
-        }
-    }
+    
+    
     
     
     private void showNotif(){
-        startForeground(nid, Notif.getOn(ctx_));
+        startForeground(nid, MNotification.get(ctx_));
     }
     
     private void removeNotif(){
