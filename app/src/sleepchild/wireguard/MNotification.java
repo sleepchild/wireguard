@@ -8,7 +8,7 @@ import android.content.*;
 
 public class MNotification
 {
-    final static String TAG = "wireguard";
+    final static String TAG = "wireguard.MNotification";
     
     private MNotification(){}
     
